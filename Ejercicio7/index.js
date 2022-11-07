@@ -36,43 +36,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 (function () {
-    // const obtenerTorta = (estaEnferma: boolean) => {
-    //     return new Promise((resolve, reject) => {
-    //         if (estaEnferma) {
-    //             reject("Kayo esta enferma, por lo que no tendremos torta en la fiesta");
-    //         }
-    //         resolve("Kayo puede hacer las tortas");
-    //     });
-    // };
-    // obtenerTorta(false)
-    //     .then((res) => console.log(res))
-    //     .catch((error) => console.log(error))
-    //     .finally(() => console.log("Si o si habra fiesta "));
+    var fiesta = {
+        tortas: 0
+    };
+    var Kayo = { saludable: undefined };
+    var determinarSalud = function (persona) {
+        persona.saludable = Math.floor(Math.random() * 10) > 5;
+    };
+    var confirmarTortas = function (fiesta, persona) {
+        if (persona.saludable) {
+            fiesta.tortas = Math.floor(Math.random() * 10) + 1;
+        }
+    };
+    var obtenerResultado = function (fiesta, persona) {
+        return new Promise(function (resolve, reject) {
+            determinarSalud(persona);
+            confirmarTortas(fiesta, persona);
+            if (fiesta.tortas > 0) {
+                resolve("La fiesta tendra ".concat(fiesta.tortas, " tortas."));
+            }
+            else
+                reject("La fiesta no tendra tortas.");
+        });
+    };
+    obtenerResultado(fiesta, Kayo)
+        .then(function (res) { return console.log(res); })["catch"](function (err) { return console.warn(err); });
+})();
+(function () {
     var ingresaNumero = function (ingreso) {
         return new Promise(function (resolve, reject) {
-            var numeroNuevo = Number(ingreso);
+            var numNuevo = Number(ingreso);
             var numAleatorio = Math.floor(Math.random() * 5 + 1);
+            if (isNaN(numNuevo))
+                reject(new Error("Tipo de entrada incorrecto."));
+            // puntos obtenidos
+            // numero aleatorio
             var respuesta;
-            if (isNaN(numeroNuevo)) {
-                reject(new Error('Tipo de entrada incorrecta'));
+            if (numNuevo === numAleatorio) {
+                respuesta = { puntos: 5, aleatorio: numAleatorio };
             }
-            if (numeroNuevo === numAleatorio) {
-                respuesta = {
-                    puntos: 5,
-                    aleatorio: numAleatorio
-                };
-            }
-            else if (numeroNuevo === numAleatorio + 1 || numeroNuevo === numAleatorio - 1) {
-                respuesta = {
-                    puntos: 2,
-                    aleatorio: numAleatorio
-                };
+            else if (numNuevo === numAleatorio - 1 ||
+                numNuevo === numAleatorio + 1) {
+                respuesta = { puntos: 2, aleatorio: numAleatorio };
             }
             else {
-                respuesta = {
-                    puntos: 0,
-                    aleatorio: numAleatorio
-                };
+                respuesta = { puntos: 0, aleatorio: numAleatorio };
             }
             resolve(respuesta);
         });
@@ -80,9 +88,8 @@ var _this = this;
     var continuarAdivinanza = function (terminar) {
         if (terminar === void 0) { terminar = true; }
         return new Promise(function (resolve) {
-            if (terminar) {
+            if (terminar)
                 resolve(false);
-            }
             setTimeout(function () {
                 resolve(true);
             }, 2000);
@@ -94,19 +101,20 @@ var _this = this;
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
-                    return [4 /*yield*/, ingresaNumero()];
+                    return [4 /*yield*/, ingresaNumero(3)];
                 case 1:
                     resultado = _a.sent();
                     puntos = resultado.puntos, aleatorio = resultado.aleatorio;
-                    console.log("El resultado del numero aleatorio es : ".concat(aleatorio, " y obtuvo el puntaje de ").concat(puntos));
                     return [4 /*yield*/, continuarAdivinanza(status)];
                 case 2:
                     continuar = _a.sent();
+                    console.log("El resultado del numero aleatorio es: ".concat(aleatorio, ", obtuviste ").concat(puntos, "pts"));
                     if (continuar) {
+                        console.log("Intentando de nuevo.");
                         interfaceUsuario(continuar);
                     }
                     else {
-                        console.log("Fin del juego");
+                        console.log("Fin del juego.");
                     }
                     return [3 /*break*/, 4];
                 case 3:
@@ -118,4 +126,4 @@ var _this = this;
         });
     }); };
     interfaceUsuario(false);
-});
+})();
