@@ -1,45 +1,48 @@
-import { Auth } from "../interfaces/auth.interface";
-import { User } from "../interfaces/user.interface";
-import UserModel from "../models/user";
+import { Auth } from "../interfaces/auth.interface"
+import { User } from "../interfaces/user.interface"
+import UserModel from "../models/user"
 import { decrypt, encrypt } from "../utils/bcrypt.handle";
 import { generateToken } from "../utils/jwt.handle";
 
-const registerNewUser = async ({ email, password, name }: User) => {
-  const checkIs = await UserModel.findOne({ email });
-  if (checkIs) {
-    return 'ALREADY_USER';
-  }
+const registerNewUser = async (user: User) => {
 
-  const passHash = await encrypt(password);
+    const { email, password } = user;
 
-  const registerNewUser = await UserModel.create(
-    { email, password: passHash, name }
-  );
+    const checkIs = await UserModel.findOne({ email });
 
-  return registerNewUser;
-};
+    if (checkIs) {
+        return 'ALREADY_USER';
+    }
+
+    user.password = await encrypt(password);
+
+    const response = await UserModel.create(user);
+
+    return response;
+}
 
 const loginUser = async ({ email, password }: Auth) => {
-  const checkIs = await UserModel.findOne({ email });
-  if (!checkIs) {
-    return 'NOT_FOUND_USER';
-  }
-  const passHash = checkIs.password;
-  const isCorrect = await decrypt(password, passHash);
+    const checkIs = await UserModel.findOne({ email });
 
-  if(!isCorrect) {
-    return 'PASSWORD_INCORRECT';
-  }
+    if (!checkIs) {
+        return 'NOT_ FOUND_USER';
+    }
+    const passHash = checkIs.password;
+    const isCorrect = await decrypt(password, passHash);
 
-  const token = generateToken(checkIs.email);
-  const data = {
-    token,
-    user: checkIs
-  };
+    if (!isCorrect) {
+        return 'PASSWORD_INCORRECT';
+    }
 
-  return data;
-};
+    const token = generateToken(checkIs.email);
+    const data = {
+        token,
+        user: checkIs
+    }
+    return data;
+}   
 
-
-export { registerNewUser, loginUser };
-
+export {
+    registerNewUser,
+    loginUser
+}

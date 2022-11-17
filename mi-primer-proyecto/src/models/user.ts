@@ -1,30 +1,30 @@
 import { model, Schema } from "mongoose";
-import { User } from "../interfaces/user.interface";
+import { User } from '../interfaces/user.interface';
+
 
 const UserSchema = new Schema<User>(
-  {
-    name: {
-      required: true,
-      type: String
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        password: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            default: 'Usuario nuevo creado...',
+        }
     },
-    password: {
-      required: true,
-      type: String
-    },
-    email: {
-      required: true,
-      unique: true,
-      type: String
-    },
-    description: {
-      default: 'Usuario nuevo creado...',
-      type: String
+    {
+        timestamps: true,
+        versionKey: false
     }
-  },
-  {
-    timestamps: true,
-    versionKey: false
-  }
 );
 
 const UserModel = model('users', UserSchema);

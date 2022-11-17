@@ -1,23 +1,27 @@
-import { Schema, Types, model, Model } from "mongoose";
-import { Storage } from "../interfaces/storage";
+import { model, Schema } from "mongoose";
+import { Storage } from '../interfaces/storage.interface';
+
 
 const StorageSchema = new Schema<Storage>(
-  {
-    fileName: {
-      type: String,
+    {
+        fileName: {
+            type: String,
+            required: true,
+        },
+        idUser: {
+            type: String,
+            required: true,
+        },
+        path: {
+            type: String,
+            required: true,
+        }
     },
-    idUser: {
-      type: String,
-    },
-    path: {
-      type: String,
-    },
-  },
-  {
-    versionKey: false,
-    timestamps: true,
-  }
+    {
+        timestamps: true,
+        versionKey: false
+    }
 );
 
-const StorageModel = model("storage", StorageSchema);
+const StorageModel = model('storage', StorageSchema);
 export default StorageModel;

@@ -1,15 +1,17 @@
-import { compare, hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs"
 
-const encrypt = async (value: string) => {
-  const valueHash = await hash(value, 8);
 
-  return valueHash;
+const encrypt = async (pass: string) => {
+    const passWordHash = await hash(pass, 8);
+    return passWordHash;
 };
 
-const decrypt = async (value: string, valueHash: string) => {
-  const isCorrect = await compare(value, valueHash);
+const decrypt = async (pass: string, passHash: string) => {
+    const isCorrect = await compare(pass, passHash);
+    return isCorrect;
+}
 
-  return isCorrect;
-};
-
-export { encrypt, decrypt };
+export {
+    encrypt,
+    decrypt
+}
